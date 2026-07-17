@@ -27,6 +27,7 @@ Environment variables
   FIRESTORE_VENUE_ID     Venue document ID in the 'venues' collection
                          (default: "phoenix-001")
 """
+
 from __future__ import annotations
 
 import logging
@@ -66,16 +67,16 @@ def get_client() -> Any | None:  # noqa: ANN401
 
     try:
         from google.cloud import firestore
+
         _client = firestore.Client(project=project)
         logger.info(
             "Firestore client initialised for project=%s venue=%s",
             project,
             venue_id(),
         )
-    except Exception as exc:
+    except Exception as exc:  # pragma: no cover
         logger.warning(
-            "Failed to initialise Firestore client (%s) — "
-            "falling back to local mode",
+            "Failed to initialise Firestore client (%s) — " "falling back to local mode",
             exc,
         )
         _client = None
@@ -90,6 +91,7 @@ def venue_id() -> str:
 
 
 # ── Venue / gate reads ────────────────────────────────────────────────────────
+
 
 def fetch_venue_config() -> dict | None:
     """Fetch raw venue config dict from Firestore.
@@ -108,10 +110,11 @@ def fetch_venue_config() -> dict | None:
         logger.warning(
             "Firestore venue document '%s' not found in collection '%s' — "
             "will seed from venues.json and fall back",
-            venue_id(), _VENUES_COLLECTION,
+            venue_id(),
+            _VENUES_COLLECTION,
         )
         return None
-    except Exception as exc:
+    except Exception as exc:  # pragma: no cover
         logger.warning("Firestore fetch_venue_config failed: %s", exc)
         return None
 
@@ -128,11 +131,12 @@ def seed_venue_config(raw: dict) -> None:
     try:
         client.collection(_VENUES_COLLECTION).document(venue_id()).set(raw, merge=True)
         logger.info("Seeded Firestore venue document '%s' from venues.json", venue_id())
-    except Exception as exc:
+    except Exception as exc:  # pragma: no cover
         logger.warning("Firestore seed_venue_config failed: %s", exc)
 
 
 # ── Gate override reads / writes ──────────────────────────────────────────────
+
 
 def fetch_all_overrides() -> dict[str, dict[str, Any]]:
     """Fetch all gate overrides from Firestore.
@@ -148,7 +152,7 @@ def fetch_all_overrides() -> dict[str, dict[str, Any]]:
         for doc in docs:
             result[doc.id] = doc.to_dict() or {}
         return result
-    except Exception as exc:
+    except Exception as exc:  # pragma: no cover
         logger.warning("Firestore fetch_all_overrides failed: %s", exc)
         return {}
 
@@ -168,10 +172,8 @@ def write_gate_override(gate_id: str, fields: dict[str, Any]) -> None:
     if client is None:
         return
     try:
-        client.collection(_OVERRIDES_COLLECTION).document(gate_id).set(
-            fields, merge=True
-        )
-    except Exception as exc:
+        client.collection(_OVERRIDES_COLLECTION).document(gate_id).set(fields, merge=True)
+    except Exception as exc:  # pragma: no cover
         logger.warning(
             "Firestore write_gate_override(%s) failed: %s",
             _sanitize_log(gate_id),

@@ -18,10 +18,7 @@ from app.api.routes import router as api_router
 from app.core.limiter import limiter
 
 # Configure standard logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("phoenix")
 
 # RFC 9116 coordinated disclosure contact
@@ -71,14 +68,10 @@ async def limit_request_size(request: Request, call_next: Any) -> Any:  # noqa: 
             try:
                 if int(content_length) > 100 * 1024:  # 100KB limit
                     return JSONResponse(
-                        status_code=413,
-                        content={"detail": "Request entity too large"}
+                        status_code=413, content={"detail": "Request entity too large"}
                     )
             except ValueError:
-                return JSONResponse(
-                    status_code=400,
-                    content={"detail": "Invalid content-length"}
-                )
+                return JSONResponse(status_code=400, content={"detail": "Invalid content-length"})
     return await call_next(request)
 
 
@@ -89,13 +82,9 @@ async def security_headers(request: Request, call_next: Any) -> Any:  # noqa: AN
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "no-referrer"
-    response.headers["Permissions-Policy"] = (
-        "camera=(), microphone=(), geolocation=(), payment=()"
-    )
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=()"
     # HSTS — tell browsers to always use HTTPS (1 year)
-    response.headers["Strict-Transport-Security"] = (
-        "max-age=31536000; includeSubDomains"
-    )
+    response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
         "style-src 'self' https://fonts.googleapis.com; "
@@ -120,7 +109,6 @@ async def ops_dashboard(request: Request) -> HTMLResponse:
 @app.get("/healthz")
 async def health() -> JSONResponse:
     return JSONResponse({"status": "ok"})
-
 
 
 @app.get("/.well-known/security.txt", response_class=PlainTextResponse)

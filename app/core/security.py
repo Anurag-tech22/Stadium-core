@@ -1,6 +1,7 @@
 """Input sanitization. Runs before ANY user text touches the context
 engine or the LLM. This is the first stop for the injection-resistance
 guarantee documented in the README."""
+
 from __future__ import annotations
 
 import bleach

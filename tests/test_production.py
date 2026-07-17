@@ -91,8 +91,11 @@ def test_production_features():
     from app.core.schemas import GateStatus
 
     overloaded_gate = GateStatus(
-        gate_id="X", name="Overloaded Gate",
-        capacity_per_min=1.0, arrivals_per_min=100.0, servers_open=1,
+        gate_id="X",
+        name="Overloaded Gate",
+        capacity_per_min=1.0,
+        arrivals_per_min=100.0,
+        servers_open=1,
     )
     est = predict_wait(overloaded_gate)
     assert est.predicted_wait_minutes == 99.0
@@ -114,8 +117,11 @@ def test_production_features():
 
     with pytest.raises(ValidationError):
         _GateStatus(
-            gate_id="ERR", name="Error Gate",
-            capacity_per_min=2.0, arrivals_per_min=-5.0, servers_open=2,
+            gate_id="ERR",
+            name="Error Gate",
+            capacity_per_min=2.0,
+            arrivals_per_min=-5.0,
+            servers_open=2,
         )
 
     # 9. Test Invalid Gate ID on turnstile update
@@ -132,7 +138,8 @@ def test_production_features():
     from app.core.schemas import AccessibilityNeed, Language, Persona, UserQuery
 
     wheelchair_q = UserQuery(
-        persona=Persona.FAN, language=Language.EN,
+        persona=Persona.FAN,
+        language=Language.EN,
         raw_text="gate B please",
         accessibility_need=AccessibilityNeed.WHEELCHAIR,
     )
@@ -158,7 +165,8 @@ def test_production_features():
 
     update_live_turnstile("B", incident="Suspicious bag near entry")
     q_incident = UserQuery(
-        persona=Persona.FAN, language=Language.EN,
+        persona=Persona.FAN,
+        language=Language.EN,
         raw_text="how is gate B doing",
         accessibility_need=AccessibilityNeed.NONE,
     )
@@ -166,9 +174,7 @@ def test_production_features():
     assert ctx_incident.safety_notice == "ALERT for Gate B — East: Suspicious bag near entry"
 
     reply_incident = MockLLM().phrase(ctx_incident)
-    assert reply_incident.text.startswith(
-        "[ALERT for Gate B — East: Suspicious bag near entry]"
-    )
+    assert reply_incident.text.startswith("[ALERT for Gate B — East: Suspicious bag near entry]")
 
     # 14. Test Ops Briefing API Endpoint
     briefing_resp = client.post("/api/ops/briefing")

@@ -11,6 +11,7 @@ These tests verify that:
 
 No browser or Node.js is required.
 """
+
 from __future__ import annotations
 
 import json
@@ -23,6 +24,7 @@ from app.core.schemas import GateStatus
 from app.main import app
 
 # ── 1. Python mirror of the JS erlangC() + predictWait() functions ───────────
+
 
 def _js_factorial(n: int) -> float:
     """Mirror of the factorial() function in app.js."""
@@ -60,19 +62,26 @@ def _js_predict_wait(lam: float, mu: float, c: int) -> float:
 
 # ── 2. Agreement tests: JS formula must match Python backend ─────────────────
 
-@pytest.mark.parametrize("lam,mu,c", [
-    (3.0, 2.0, 3),
-    (1.0, 2.0, 2),
-    (9.0, 3.0, 4),
-    (7.8, 2.8, 3),
-    (0.0, 2.0, 2),
-    (0.6, 1.0, 1),
-])
+
+@pytest.mark.parametrize(
+    "lam,mu,c",
+    [
+        (3.0, 2.0, 3),
+        (1.0, 2.0, 2),
+        (9.0, 3.0, 4),
+        (7.8, 2.8, 3),
+        (0.0, 2.0, 2),
+        (0.6, 1.0, 1),
+    ],
+)
 def test_js_erlang_c_matches_python_backend(lam, mu, c):
     """JS predictWait() must agree with Python predict_wait() to within ±0.2 min."""
     gate = GateStatus(
-        gate_id="TEST", name="Test",
-        arrivals_per_min=lam, capacity_per_min=mu, servers_open=c,
+        gate_id="TEST",
+        name="Test",
+        arrivals_per_min=lam,
+        capacity_per_min=mu,
+        servers_open=c,
     )
     py_wait = predict_wait(gate).predicted_wait_minutes
     js_wait = _js_predict_wait(lam, mu, c)
@@ -170,7 +179,12 @@ def test_snapshot_contains_matchday_phase_fields(ops_client):
     assert "matchday_phase" in data, "matchday_phase missing from ops snapshot"
     assert "matchday_label" in data, "matchday_label missing from ops snapshot"
     valid_phases = {
-        "pre_match", "kickoff", "half_time", "second_half", "full_time", "post_match",
+        "pre_match",
+        "kickoff",
+        "half_time",
+        "second_half",
+        "full_time",
+        "post_match",
     }
     assert data["matchday_phase"] in valid_phases, f"Unknown phase: {data['matchday_phase']}"
     assert isinstance(data["matchday_label"], str) and len(data["matchday_label"]) > 0

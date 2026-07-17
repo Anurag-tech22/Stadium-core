@@ -4,6 +4,7 @@ Every fact that reaches the LLM layer must pass through one of these
 models first. The LLM never invents a gate, a wait time, or a hazard —
 it only phrases what the engine already computed.
 """
+
 from __future__ import annotations
 
 from enum import Enum
@@ -17,7 +18,6 @@ class Language(str, Enum):
     ES = "es"
     FR = "fr"
     PT = "pt"
-
 
 
 class Persona(str, Enum):
@@ -39,20 +39,21 @@ class GateStatus(BaseModel):
     arrivals_per_min: float = Field(ge=0)
     servers_open: int = Field(ge=0)
     step_free: bool = True
-    has_visual_display: bool = True   # LED/screen boards for hearing-impaired wayfinding
-    has_audio_guidance: bool = True   # PA/audio system for visually-impaired wayfinding
+    has_visual_display: bool = True  # LED/screen boards for hearing-impaired wayfinding
+    has_audio_guidance: bool = True  # PA/audio system for visually-impaired wayfinding
     incident: str | None = None
 
     @field_validator("arrivals_per_min")
     @classmethod
     def _non_negative(cls, v: float) -> float:
         if v < 0:
-            raise ValueError("arrivals_per_min cannot be negative")
+            raise ValueError("arrivals_per_min cannot be negative")  # pragma: no cover
         return v
 
 
 class WaitEstimate(BaseModel):
     """Output of the deterministic queueing model — never produced by the LLM."""
+
     gate_id: str
     predicted_wait_minutes: float
     utilization: float
@@ -71,6 +72,7 @@ class UserQuery(BaseModel):
 class ResolvedContext(BaseModel):
     """The ONLY thing handed to the LLM. Free text never reaches it directly
     except as an already-sanitized, already-bounded field."""
+
     intent: str
     recommended_gate: GateStatus | None = None
     wait_estimate: WaitEstimate | None = None

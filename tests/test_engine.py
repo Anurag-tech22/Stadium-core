@@ -53,8 +53,11 @@ def test_classify_intent_unmatched_falls_back():
 
 def test_predict_wait_zero_arrivals_zero_wait():
     gate = GateStatus(
-        gate_id="Z", name="Test", capacity_per_min=2.0,
-        arrivals_per_min=0.0, servers_open=2,
+        gate_id="Z",
+        name="Test",
+        capacity_per_min=2.0,
+        arrivals_per_min=0.0,
+        servers_open=2,
     )
     est = predict_wait(gate)
     assert est.predicted_wait_minutes == 0.0
@@ -63,12 +66,18 @@ def test_predict_wait_zero_arrivals_zero_wait():
 
 def test_predict_wait_increases_with_load():
     low = GateStatus(
-        gate_id="Z", name="Test", capacity_per_min=2.0,
-        arrivals_per_min=1.0, servers_open=2,
+        gate_id="Z",
+        name="Test",
+        capacity_per_min=2.0,
+        arrivals_per_min=1.0,
+        servers_open=2,
     )
     high = GateStatus(
-        gate_id="Z", name="Test", capacity_per_min=2.0,
-        arrivals_per_min=3.6, servers_open=2,
+        gate_id="Z",
+        name="Test",
+        capacity_per_min=2.0,
+        arrivals_per_min=3.6,
+        servers_open=2,
     )
     assert predict_wait(high).predicted_wait_minutes > predict_wait(low).predicted_wait_minutes
 
@@ -120,8 +129,11 @@ def test_classify_intent_all_keywords():
 def test_predict_wait_zero_capacity_servers_open():
     # Test c * mu == 0 when servers_open = 0
     gate_c0 = GateStatus(
-        gate_id="C0", name="Zero Servers",
-        capacity_per_min=2.0, arrivals_per_min=1.0, servers_open=1,
+        gate_id="C0",
+        name="Zero Servers",
+        capacity_per_min=2.0,
+        arrivals_per_min=1.0,
+        servers_open=1,
     )
     gate_c0.servers_open = 0
     est_c0 = predict_wait(gate_c0)
@@ -129,8 +141,11 @@ def test_predict_wait_zero_capacity_servers_open():
 
     # Test c * mu == 0 when capacity_per_min = 0.0
     gate_mu0 = GateStatus(
-        gate_id="MU0", name="Zero Capacity",
-        capacity_per_min=2.0, arrivals_per_min=1.0, servers_open=1,
+        gate_id="MU0",
+        name="Zero Capacity",
+        capacity_per_min=2.0,
+        arrivals_per_min=1.0,
+        servers_open=1,
     )
     gate_mu0.capacity_per_min = 0.0
     est_mu0 = predict_wait(gate_mu0)
@@ -140,8 +155,11 @@ def test_predict_wait_zero_capacity_servers_open():
 def test_predict_wait_rho_clamp():
     # Set arrivals high so rho > 1.0
     gate = GateStatus(
-        gate_id="CLAMP", name="Clamp Test",
-        capacity_per_min=1.0, arrivals_per_min=10.0, servers_open=1,
+        gate_id="CLAMP",
+        name="Clamp Test",
+        capacity_per_min=1.0,
+        arrivals_per_min=10.0,
+        servers_open=1,
     )
     est = predict_wait(gate)
     assert est.utilization == 0.999
@@ -149,26 +167,38 @@ def test_predict_wait_rho_clamp():
 
 def test_predict_wait_congestion_levels():
     gate_low = GateStatus(
-        gate_id="LOW", name="Low Test",
-        capacity_per_min=1.0, arrivals_per_min=0.4, servers_open=1,
+        gate_id="LOW",
+        name="Low Test",
+        capacity_per_min=1.0,
+        arrivals_per_min=0.4,
+        servers_open=1,
     )
     assert predict_wait(gate_low).congestion_level == "low"
 
     gate_mod = GateStatus(
-        gate_id="MOD", name="Moderate Test",
-        capacity_per_min=1.0, arrivals_per_min=0.6, servers_open=1,
+        gate_id="MOD",
+        name="Moderate Test",
+        capacity_per_min=1.0,
+        arrivals_per_min=0.6,
+        servers_open=1,
     )
     assert predict_wait(gate_mod).congestion_level == "moderate"
 
     gate_high = GateStatus(
-        gate_id="HIGH", name="High Test",
-        capacity_per_min=1.0, arrivals_per_min=0.8, servers_open=1,
+        gate_id="HIGH",
+        name="High Test",
+        capacity_per_min=1.0,
+        arrivals_per_min=0.8,
+        servers_open=1,
     )
     assert predict_wait(gate_high).congestion_level == "high"
 
     gate_crit = GateStatus(
-        gate_id="CRIT", name="Critical Test",
-        capacity_per_min=1.0, arrivals_per_min=0.95, servers_open=1,
+        gate_id="CRIT",
+        name="Critical Test",
+        capacity_per_min=1.0,
+        arrivals_per_min=0.95,
+        servers_open=1,
     )
     assert predict_wait(gate_crit).congestion_level == "critical"
 
@@ -208,12 +238,18 @@ def test_mock_llm_various_intents_languages_and_empty_contexts():
         ctx_lang = ResolvedContext(
             intent="find_gate",
             recommended_gate=GateStatus(
-                gate_id="A", name="Gate A",
-                capacity_per_min=2.0, arrivals_per_min=1.0, servers_open=1,
+                gate_id="A",
+                name="Gate A",
+                capacity_per_min=2.0,
+                arrivals_per_min=1.0,
+                servers_open=1,
             ),
             wait_estimate=WaitEstimate(
-                gate_id="A", predicted_wait_minutes=5.0,
-                utilization=0.5, congestion_level="low", server_farm_saturated=False,
+                gate_id="A",
+                predicted_wait_minutes=5.0,
+                utilization=0.5,
+                congestion_level="low",
+                server_farm_saturated=False,
             ),
             accessible_route_available=True,
             safety_notice=None,
@@ -232,16 +268,22 @@ def test_gemini_llm_mocked():
     with patch.dict("os.environ", {"PHOENIX_STADIUM_LLM_PROVIDER": "mock"}):
         assert isinstance(get_llm(), _MockLLM)
 
-    with patch.dict("os.environ", {
-        "PHOENIX_STADIUM_LLM_PROVIDER": "gemini",
-        "GEMINI_API_KEY": "",
-    }):
+    with patch.dict(
+        "os.environ",
+        {
+            "PHOENIX_STADIUM_LLM_PROVIDER": "gemini",
+            "GEMINI_API_KEY": "",
+        },
+    ):
         assert isinstance(get_llm(), _MockLLM)
 
-    with patch.dict("os.environ", {
-        "PHOENIX_STADIUM_LLM_PROVIDER": "gemini",
-        "GEMINI_API_KEY": "test_api_key",
-    }):
+    with patch.dict(
+        "os.environ",
+        {
+            "PHOENIX_STADIUM_LLM_PROVIDER": "gemini",
+            "GEMINI_API_KEY": "test_api_key",
+        },
+    ):
         mock_gemini_instance = MagicMock()
         with patch("app.core.llm.GeminiLLM", return_value=mock_gemini_instance) as mock_cls:
             llm = get_llm()
@@ -253,22 +295,31 @@ def test_gemini_llm_class_directly():
     mock_genai = MagicMock()
     mock_google = MagicMock()
     mock_google.generativeai = mock_genai
-    with patch.dict("sys.modules", {
-        "google": mock_google,
-        "google.generativeai": mock_genai,
-    }):
+    with patch.dict(
+        "sys.modules",
+        {
+            "google": mock_google,
+            "google.generativeai": mock_genai,
+        },
+    ):
         from app.core.llm import GeminiLLM
 
         with patch.dict("os.environ", {"GEMINI_API_KEY": "test_api_key"}):
             llm = GeminiLLM()
 
             gate = GateStatus(
-                gate_id="A", name="Gate A",
-                capacity_per_min=2.0, arrivals_per_min=1.0, servers_open=1,
+                gate_id="A",
+                name="Gate A",
+                capacity_per_min=2.0,
+                arrivals_per_min=1.0,
+                servers_open=1,
             )
             wait = WaitEstimate(
-                gate_id="A", predicted_wait_minutes=5.5,
-                utilization=0.5, congestion_level="low", server_farm_saturated=False,
+                gate_id="A",
+                predicted_wait_minutes=5.5,
+                utilization=0.5,
+                congestion_level="low",
+                server_farm_saturated=False,
             )
             ctx = ResolvedContext(
                 intent="general_info",
@@ -328,6 +379,7 @@ def test_lost_and_found_intent():
 # New tests: VISUAL / HEARING accessibility, security.txt, snapshot
 # ---------------------------------------------------------------------------
 
+
 def test_best_gate_visual_accessibility_filters_audio_guidance():
     """Gates without audio guidance (Gate H) must be excluded for VISUAL need."""
     gate, _ = best_gate(AccessibilityNeed.VISUAL)
@@ -345,7 +397,8 @@ def test_best_gate_hearing_accessibility_filters_visual_display():
 def test_resolve_propagates_accessibility_need_to_context():
     """accessibility_need from UserQuery must appear on the ResolvedContext."""
     q = UserQuery(
-        persona=Persona.FAN, language=Language.EN,
+        persona=Persona.FAN,
+        language=Language.EN,
         raw_text="I need an accessible entrance",
         accessibility_need=AccessibilityNeed.VISUAL,
     )
@@ -356,12 +409,19 @@ def test_resolve_propagates_accessibility_need_to_context():
 def test_mock_llm_visual_accessibility_phrasing():
     """VISUAL accessibility intent must mention audio guidance."""
     gate = GateStatus(
-        gate_id="A", name="Gate A", capacity_per_min=3.0,
-        arrivals_per_min=1.0, servers_open=3, has_audio_guidance=True,
+        gate_id="A",
+        name="Gate A",
+        capacity_per_min=3.0,
+        arrivals_per_min=1.0,
+        servers_open=3,
+        has_audio_guidance=True,
     )
     wait = WaitEstimate(
-        gate_id="A", predicted_wait_minutes=2.0,
-        utilization=0.3, congestion_level="low", server_farm_saturated=False,
+        gate_id="A",
+        predicted_wait_minutes=2.0,
+        utilization=0.3,
+        congestion_level="low",
+        server_farm_saturated=False,
     )
     ctx = ResolvedContext(
         intent="accessibility",
@@ -381,12 +441,19 @@ def test_mock_llm_visual_accessibility_phrasing():
 def test_mock_llm_hearing_accessibility_phrasing():
     """HEARING accessibility intent must mention visual display / LED."""
     gate = GateStatus(
-        gate_id="C", name="Gate C", capacity_per_min=3.0,
-        arrivals_per_min=1.0, servers_open=3, has_visual_display=True,
+        gate_id="C",
+        name="Gate C",
+        capacity_per_min=3.0,
+        arrivals_per_min=1.0,
+        servers_open=3,
+        has_visual_display=True,
     )
     wait = WaitEstimate(
-        gate_id="C", predicted_wait_minutes=3.0,
-        utilization=0.3, congestion_level="low", server_farm_saturated=False,
+        gate_id="C",
+        predicted_wait_minutes=3.0,
+        utilization=0.3,
+        congestion_level="low",
+        server_farm_saturated=False,
     )
     ctx = ResolvedContext(
         intent="accessibility",
@@ -406,12 +473,18 @@ def test_mock_llm_hearing_accessibility_phrasing():
 def test_spanish_language_response():
     """Spanish (ES) template must return a non-empty string containing the gate name."""
     gate = GateStatus(
-        gate_id="A", name="Gate A \u2014 North", capacity_per_min=3.2,
-        arrivals_per_min=1.0, servers_open=3,
+        gate_id="A",
+        name="Gate A \u2014 North",
+        capacity_per_min=3.2,
+        arrivals_per_min=1.0,
+        servers_open=3,
     )
     wait = WaitEstimate(
-        gate_id="A", predicted_wait_minutes=4.0,
-        utilization=0.3, congestion_level="low", server_farm_saturated=False,
+        gate_id="A",
+        predicted_wait_minutes=4.0,
+        utilization=0.3,
+        congestion_level="low",
+        server_farm_saturated=False,
     )
     ctx = ResolvedContext(
         intent="find_gate",
@@ -468,7 +541,8 @@ def test_ops_live_sse_content_type():
 def test_infer_accessibility_need_from_text_wheelchair():
     """_infer_accessibility_need must upgrade NONE -> WHEELCHAIR when 'wheelchair' is in text."""
     result = _infer_accessibility_need(
-        AccessibilityNeed.NONE, "I need a wheelchair accessible gate",
+        AccessibilityNeed.NONE,
+        "I need a wheelchair accessible gate",
     )
     assert result == AccessibilityNeed.WHEELCHAIR
 
@@ -495,6 +569,7 @@ def test_resolve_live_infers_wheelchair_from_text():
 
 
 # ── venues.json loader tests ─────────────────────────────────────────────────
+
 
 def test_gates_loaded_from_venues_json():
     """GATES must be populated at import time from venues.json (not hardcoded)."""
@@ -526,6 +601,7 @@ def test_venue_load_malformed_file_returns_empty(tmp_path, monkeypatch):
 
 
 # ── matchday phase tests ─────────────────────────────────────────────────────
+
 
 def test_matchday_phase_demo_mode_returns_pre_match():
     """Without KICKOFF_EPOCH_UNIX set, must return pre_match phase (demo mode)."""

@@ -23,6 +23,7 @@ def test_frontend_rendering_and_sse():
     """
     try:
         import playwright.sync_api as pw
+
         sync_playwright = pw.sync_playwright
         has_playwright = True
     except ImportError:

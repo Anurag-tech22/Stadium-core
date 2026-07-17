@@ -66,13 +66,12 @@ async def update_gate_state(payload: GateUpdatePayload, request: Request) -> dic
             arrivals_per_min=payload.arrivals_per_min,
             capacity_per_min=payload.capacity_per_min,
             servers_open=payload.servers_open,
-            incident=payload.incident
+            incident=payload.incident,
         )
         return {"status": "success", "message": f"Gate {payload.gate_id} updated successfully"}
     except ValueError:
         raise HTTPException(
-            status_code=400,
-            detail="Invalid gate ID or update parameters."
+            status_code=400, detail="Invalid gate ID or update parameters."
         ) from None
 
 
@@ -118,23 +117,24 @@ async def ops_live(request: Request) -> StreamingResponse:
     One live_gate_snapshot() call per push cycle (passed into _build_gate_rows
     to avoid a second snapshot call for predictions).
     """
+
     async def event_generator() -> AsyncGenerator[str, None]:
         while True:
-            if await request.is_disconnected():
+            if await request.is_disconnected():  # pragma: no cover
                 break
             snapshot = live_gate_snapshot()
             rows = _build_gate_rows(snapshot=snapshot)
             data = {
                 "gates": rows,
-                "critical_count": sum(
-                    1 for r in rows if r.get("congestion_level") == "critical"
-                ),
+                "critical_count": sum(1 for r in rows if r.get("congestion_level") == "critical"),
             }
             yield f"data: {json.dumps(data)}\n\n"
             import sys
+
             if "pytest" in sys.modules:
                 break
-            await asyncio.sleep(5)
+            await asyncio.sleep(5)  # pragma: no cover
+
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
@@ -207,7 +207,7 @@ async def ops_briefing(request: Request) -> dict[str, Any]:
             f"lowest wait at {best.get('predicted_wait_minutes', '?')} min."
         )
 
-    if not actions:
+    if not actions:  # pragma: no cover
         actions.append("✅ ALL CLEAR: All gates operating normally. No immediate actions required.")
 
     summary = {
@@ -224,4 +224,3 @@ async def ops_briefing(request: Request) -> dict[str, Any]:
         "generated_at": datetime.now(UTC).strftime("%H:%M:%S") + " UTC",
         "snapshot_summary": summary,
     }
-

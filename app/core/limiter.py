@@ -4,6 +4,7 @@ Previously app/main.py and app/api/routes.py each created their own
 Limiter() — two independent in-memory counters that never talked to
 each other. Importing one instance from here fixes that.
 """
+
 from __future__ import annotations
 
 import os
@@ -18,4 +19,3 @@ if redis_url:
 else:
     # Fall back to in-memory store for development/testing
     limiter = Limiter(key_func=get_remote_address)
-

@@ -5,6 +5,7 @@ Verifies that:
 2. When GOOGLE_CLOUD_PROJECT is set, it attempts to load firestore.Client.
 3. Operations like fetch_venue_config and fetch_all_overrides fall back gracefully.
 """
+
 from __future__ import annotations
 
 import os

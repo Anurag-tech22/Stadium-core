@@ -5,6 +5,7 @@ no matter what the user's free text says, the recommended gate and
 predicted wait come from the deterministic engine, never from parsing
 the user's words as instructions.
 """
+
 from __future__ import annotations
 
 from fastapi.testclient import TestClient
@@ -29,7 +30,10 @@ INJECTION_ATTEMPTS = [
 def _run(text: str, need=AccessibilityNeed.NONE):
     clean = sanitize_text(text)
     q = UserQuery(
-        persona=Persona.FAN, language=Language.EN, raw_text=text, accessibility_need=need,
+        persona=Persona.FAN,
+        language=Language.EN,
+        raw_text=text,
+        accessibility_need=need,
     )
     ctx = resolve(q, clean)
     reply = MockLLM().phrase(ctx)

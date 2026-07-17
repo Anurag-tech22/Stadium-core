@@ -3,6 +3,7 @@
 Resets the shared rate limiter before/after every test so one test's
 calls to /api/assist don't eat into another test's rate-limit budget.
 """
+
 from __future__ import annotations
 
 import logging

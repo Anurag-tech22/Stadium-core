@@ -6,6 +6,7 @@ and turns it into natural language in the fan's chosen language.
 
 Supports: English · Hindi · Spanish · French · Portuguese.
 """
+
 from __future__ import annotations
 
 import logging
@@ -22,13 +23,9 @@ logger = logging.getLogger("phoenix.llm")
 _TEMPLATES: dict[str, dict[Language, str]] = {
     "find_gate": {
         Language.EN: (
-            "Head to {gate}. Current predicted wait is "
-            "about {wait} minutes ({level})."
+            "Head to {gate}. Current predicted wait is " "about {wait} minutes ({level})."
         ),
-        Language.HI: (
-            "{gate} की ओर जाएं। अनुमानित प्रतीक्षा समय "
-            "लगभग {wait} मिनट है ({level})."
-        ),
+        Language.HI: ("{gate} की ओर जाएं। अनुमानित प्रतीक्षा समय " "लगभग {wait} मिनट है ({level})."),
         Language.ES: (
             "Dirígete a {gate}. El tiempo de espera "
             "estimado es de unos {wait} minutos ({level})."
@@ -38,19 +35,14 @@ _TEMPLATES: dict[str, dict[Language, str]] = {
             "estimé es d'environ {wait} minutes ({level})."
         ),
         Language.PT: (
-            "Vá até {gate}. O tempo de espera estimado é "
-            "de cerca de {wait} minutos ({level})."
+            "Vá até {gate}. O tempo de espera estimado é " "de cerca de {wait} minutos ({level})."
         ),
     },
     "wait_time": {
         Language.EN: (
-            "{gate} currently has a predicted wait of {wait} "
-            "minutes — congestion is {level}."
+            "{gate} currently has a predicted wait of {wait} " "minutes — congestion is {level}."
         ),
-        Language.HI: (
-            "{gate} पर वर्तमान में अनुमानित प्रतीक्षा {wait} "
-            "मिनट है — भीड़ स्तर {level} है।"
-        ),
+        Language.HI: ("{gate} पर वर्तमान में अनुमानित प्रतीक्षा {wait} " "मिनट है — भीड़ स्तर {level} है।"),
         Language.ES: (
             "{gate} tiene actualmente una espera estimada de "
             "{wait} minutos — congestión {level}."
@@ -66,26 +58,13 @@ _TEMPLATES: dict[str, dict[Language, str]] = {
     },
     # Standard wheelchair / step-free accessibility
     "accessibility": {
-        Language.EN: (
-            "The step-free route is via {gate}, predicted "
-            "wait {wait} minutes."
-        ),
-        Language.HI: (
-            "स्टेप-फ्री रास्ता {gate} से है, अनुमानित "
-            "प्रतीक्षा {wait} मिनट।"
-        ),
-        Language.ES: (
-            "La ruta sin escalones es por {gate}, espera "
-            "estimada de {wait} minutos."
-        ),
+        Language.EN: ("The step-free route is via {gate}, predicted " "wait {wait} minutes."),
+        Language.HI: ("स्टेप-फ्री रास्ता {gate} से है, अनुमानित " "प्रतीक्षा {wait} मिनट।"),
+        Language.ES: ("La ruta sin escalones es por {gate}, espera " "estimada de {wait} minutos."),
         Language.FR: (
-            "L'itinéraire sans marche se fait via {gate}, "
-            "attente estimée de {wait} minutes."
+            "L'itinéraire sans marche se fait via {gate}, " "attente estimée de {wait} minutes."
         ),
-        Language.PT: (
-            "A rota sem degraus é via {gate}, espera "
-            "estimada de {wait} minutos."
-        ),
+        Language.PT: ("A rota sem degraus é via {gate}, espera " "estimada de {wait} minutos."),
     },
     # Audio-guided route for visually-impaired fans
     "accessibility_visual": {
@@ -158,12 +137,10 @@ _TEMPLATES: dict[str, dict[Language, str]] = {
             "{level} congestion ({wait} min wait)."
         ),
         Language.HI: (
-            "अभी सबसे कम भीड़ वाला प्रवेश द्वार {gate} है, "
-            "भीड़ स्तर {level} ({wait} मिनट प्रतीक्षा)।"
+            "अभी सबसे कम भीड़ वाला प्रवेश द्वार {gate} है, " "भीड़ स्तर {level} ({wait} मिनट प्रतीक्षा)।"
         ),
         Language.ES: (
-            "La entrada menos congestionada ahora es {gate}, "
-            "congestión {level} ({wait} min)."
+            "La entrada menos congestionada ahora es {gate}, " "congestión {level} ({wait} min)."
         ),
         Language.FR: (
             "L'entrée la moins encombrée en ce moment est {gate} "
@@ -250,8 +227,7 @@ _TEMPLATES: dict[str, dict[Language, str]] = {
         Language.EN: "The best entry point right now is {gate}, predicted wait {wait} minutes.",
         Language.HI: "अभी सबसे अच्छा प्रवेश बिंदु {gate} है, अनुमानित प्रतीक्षा {wait} मिनट।",
         Language.ES: (
-            "El mejor punto de entrada ahora es {gate}, espera "
-            "estimada de {wait} minutos."
+            "El mejor punto de entrada ahora es {gate}, espera " "estimada de {wait} minutos."
         ),
         Language.FR: (
             "Le meilleur point d'entrée en ce moment es {gate}, "
@@ -265,8 +241,7 @@ _TEMPLATES: dict[str, dict[Language, str]] = {
             "at the guest services desk near the main concourse."
         ),
         Language.HI: (
-            "खोई हुई वस्तु की सूचना दें, या मुख्य मार्ग के पास "
-            "अतिथि सेवा डेस्क पर जमा वस्तुओं की जांच करें।"
+            "खोई हुई वस्तु की सूचना दें, या मुख्य मार्ग के पास " "अतिथि सेवा डेस्क पर जमा वस्तुओं की जांच करें।"
         ),
         Language.ES: (
             "Reporta un objeto perdido, o consulta lo entregado, "
@@ -299,12 +274,10 @@ _ALTERNATE_SUFFIX: dict[Language, str] = {
     Language.HI: " अगर वह व्यस्त है, तो {gate} अगला सबसे अच्छा विकल्प है, लगभग {wait} मिनट में।",
     Language.ES: " Si está ocupado, {gate} es la siguiente mejor opción, con unos {wait} minutos.",
     Language.FR: (
-        " Si c'est occupé, {gate} est la meilleure alternative, "
-        "avec environ {wait} minutes."
+        " Si c'est occupé, {gate} est la meilleure alternative, " "avec environ {wait} minutes."
     ),
     Language.PT: (
-        " Si estiver ocupado, {gate} é a próxima melhor opção, "
-        "com cerca de {wait} minutos."
+        " Si estiver ocupado, {gate} é a próxima melhor opção, " "com cerca de {wait} minutos."
     ),
 }
 
@@ -329,22 +302,25 @@ class MockLLM(BaseLLM):
                 intent_key = "accessibility_hearing"
 
         template = _TEMPLATES.get(intent_key, _TEMPLATES["general_info"])[lang]
-        gate_name = (
-            ctx.recommended_gate.name if ctx.recommended_gate else "the main concourse"
-        )
+        gate_name = ctx.recommended_gate.name if ctx.recommended_gate else "the main concourse"
         wait_min = ctx.wait_estimate.predicted_wait_minutes if ctx.wait_estimate else 0
         level = ctx.wait_estimate.congestion_level if ctx.wait_estimate else "low"
 
-        localized_level = _CONGESTION_LABELS.get(
-            lang, _CONGESTION_LABELS[Language.EN]
-        ).get(level, level)
+        localized_level = _CONGESTION_LABELS.get(lang, _CONGESTION_LABELS[Language.EN]).get(
+            level, level
+        )
         text = template.format(
-            gate=gate_name, wait=wait_min, level=localized_level,
+            gate=gate_name,
+            wait=wait_min,
+            level=localized_level,
             safety=ctx.safety_notice or "",
         )
 
         if ctx.alternate_gate and ctx.intent in (
-            "find_gate", "wait_time", "crowd_status", "general_info"
+            "find_gate",
+            "wait_time",
+            "crowd_status",
+            "general_info",
         ):
             alt_wait = ctx.alternate_wait.predicted_wait_minutes if ctx.alternate_wait else "?"
             suffix_template = _ALTERNATE_SUFFIX.get(lang, _ALTERNATE_SUFFIX[Language.EN])
@@ -376,6 +352,7 @@ class GeminiLLM(BaseLLM):
     def __init__(self) -> None:
         # optional dep, imported lazily
         import google.generativeai as genai  # type: ignore[import-not-found]
+
         api_key = os.environ["GEMINI_API_KEY"]
         genai.configure(api_key=api_key)
         self._model = genai.GenerativeModel("gemini-2.0-flash")
@@ -383,8 +360,11 @@ class GeminiLLM(BaseLLM):
     def phrase(self, ctx: ResolvedContext) -> AssistantReply:
         base = MockLLM().phrase(ctx)
         lang_name = {
-            Language.EN: "English", Language.HI: "Hindi", Language.ES: "Spanish",
-            Language.FR: "French", Language.PT: "Portuguese",
+            Language.EN: "English",
+            Language.HI: "Hindi",
+            Language.ES: "Spanish",
+            Language.FR: "French",
+            Language.PT: "Portuguese",
         }.get(ctx.language, ctx.language.value)
         prompt = (
             f"Rephrase this venue-assistant message naturally in {lang_name}. "
@@ -398,14 +378,13 @@ class GeminiLLM(BaseLLM):
             # or wipes the facts, fallback to MockLLM.
             if ctx.recommended_gate and ctx.recommended_gate.name not in candidate:
                 return base
-            if (
-                ctx.wait_estimate
-                and str(ctx.wait_estimate.predicted_wait_minutes) not in candidate
-            ):
+            if ctx.wait_estimate and str(ctx.wait_estimate.predicted_wait_minutes) not in candidate:
                 return base
             return AssistantReply(
-                text=candidate, intent=base.intent,
-                grounded_facts=base.grounded_facts, language=ctx.language,
+                text=candidate,
+                intent=base.intent,
+                grounded_facts=base.grounded_facts,
+                language=ctx.language,
             )
         except Exception as exc:
             logger.warning("Gemini LLM phrasing failed: %s", exc)
