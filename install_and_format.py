@@ -6,9 +6,11 @@ subprocess.run(["taskkill", "/F", "/IM", "pytest.exe"], capture_output=True)
 subprocess.run(["taskkill", "/F", "/IM", "ruff.exe"], capture_output=True)
 
 print("Installing requirements-dev.txt dependencies locally...")
-res = subprocess.run([r".venv\Scripts\python.exe", "-m", "pip", "install", "-r", "requirements-dev.txt"], capture_output=True, text=True)
+# Try to upgrade only Ruff in the virtual environment (bypassing the pytest.exe lock)
+print("Upgrading Ruff to version 0.15.22 locally...")
+res = subprocess.run([r".venv\Scripts\python.exe", "-m", "pip", "install", "ruff==0.15.22"], capture_output=True, text=True)
 print("STDOUT:")
-print(res.stdout[:2000])  # print first 2000 chars of stdout
+print(res.stdout)
 print("STDERR:")
 print(res.stderr)
 print(f"Exit code: {res.returncode}")
@@ -20,4 +22,4 @@ if res.returncode == 0:
     print(res2.stdout)
     print(f"Exit code: {res2.returncode}")
 else:
-    print("Failed to upgrade dependencies.")
+    print("Failed to upgrade Ruff.")
