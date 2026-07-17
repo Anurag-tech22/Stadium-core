@@ -1,0 +1,140 @@
+{
+  "venue_name": "Phoenix Stadium",
+  "venue_id": "phoenix-001",
+  "gates": [
+    {
+      "gate_id": "A",
+      "name": "Gate A — North",
+      "capacity_per_min": 3.2,
+      "arrivals_per_min": 9.5,
+      "servers_open": 4,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "B",
+      "name": "Gate B — East",
+      "capacity_per_min": 2.8,
+      "arrivals_per_min": 7.8,
+      "servers_open": 3,
+      "step_free": false,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "C",
+      "name": "Gate C — South",
+      "capacity_per_min": 3.0,
+      "arrivals_per_min": 6.5,
+      "servers_open": 3,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "D",
+      "name": "Gate D — West (accessible)",
+      "capacity_per_min": 1.5,
+      "arrivals_per_min": 1.8,
+      "servers_open": 2,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "E",
+      "name": "Gate E — Northeast (Family)",
+      "capacity_per_min": 2.2,
+      "arrivals_per_min": 5.8,
+      "servers_open": 3,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "F",
+      "name": "Gate F — VIP / Premium",
+      "capacity_per_min": 1.0,
+      "arrivals_per_min": 0.6,
+      "servers_open": 1,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "G",
+      "name": "Gate G — Southeast (Overflow)",
+      "capacity_per_min": 2.5,
+      "arrivals_per_min": 4.5,
+      "servers_open": 3,
+      "step_free": true,
+      "has_visual_display": false,
+      "has_audio_guidance": true
+    },
+    {
+      "gate_id": "H",
+      "name": "Gate H — Northwest (Press)",
+      "capacity_per_min": 1.2,
+      "arrivals_per_min": 0.5,
+      "servers_open": 1,
+      "step_free": true,
+      "has_visual_display": true,
+      "has_audio_guidance": false
+    }
+  ],
+  "matchday_schedule": {
+    "_comment": "Minutes relative to KICKOFF_EPOCH_UNIX env var. Set KICKOFF_EPOCH_UNIX to Unix timestamp of kickoff. Omit for demo/static mode (uses default_phase).",
+    "phases": [
+      {
+        "name": "pre_match",
+        "label": "Pre-match (gates open)",
+        "start_min": -90,
+        "end_min": 0,
+        "arrivals_multiplier": 1.8,
+        "description": "Peak fan arrival — 90 min before kickoff until kickoff"
+      },
+      {
+        "name": "kickoff",
+        "label": "Kickoff — first half underway",
+        "start_min": 0,
+        "end_min": 45,
+        "arrivals_multiplier": 0.1,
+        "description": "Fans inside, gates nearly empty during first half"
+      },
+      {
+        "name": "half_time",
+        "label": "Half-time",
+        "start_min": 45,
+        "end_min": 60,
+        "arrivals_multiplier": 0.6,
+        "description": "Moderate surge — concession runs and late arrivals"
+      },
+      {
+        "name": "second_half",
+        "label": "Second half — play underway",
+        "start_min": 60,
+        "end_min": 105,
+        "arrivals_multiplier": 0.1,
+        "description": "Fans inside again — minimal gate traffic"
+      },
+      {
+        "name": "full_time",
+        "label": "Full-time — egress surge",
+        "start_min": 105,
+        "end_min": 150,
+        "arrivals_multiplier": 0.0,
+        "description": "Exits, not entries — gate arrivals drop to near zero"
+      },
+      {
+        "name": "post_match",
+        "label": "Post-match",
+        "start_min": 150,
+        "end_min": 9999,
+        "arrivals_multiplier": 0.05,
+        "description": "Stragglers only"
+      }
+    ],
+    "default_phase": "pre_match"
+  }
+}

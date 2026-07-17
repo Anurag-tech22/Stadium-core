@@ -1,0 +1,54 @@
+=== BANDIT OUTPUT ===
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+[main]	INFO	running on Python 3.13.7
+[manager]	WARNING	Test in comment: deliberate is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: any is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: Gemini is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: failure is not a test name or id, ignoring
+[manager]	WARNING	Test in comment: network is not a test name or id, ignoring
+Run started:2026-07-14 12:28:26.784688
+
+Test results:
+	No issues identified.
+
+Code scanned:
+	Total lines of code: 631
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 1
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 0
+		High: 0
+Files skipped (0):
+
+=====================
+
+=== PIP-AUDIT OUTPUT ===
+Found 6 known vulnerabilities in 2 packages
+Name   Version ID              Fix Versions
+------ ------- --------------- ------------
+pip    25.2    PYSEC-2026-196  26.1.2
+pip    25.2    PYSEC-2026-1795 25.3
+pip    25.2    PYSEC-2026-1796 26.0
+pip    25.2    PYSEC-2026-2875 26.1
+pip    25.2    PYSEC-2026-2876 26.1
+pytest 8.3.3   PYSEC-2026-1845 9.0.3
+
+========================
+
+=== SECURITY RISK EXPLANATION ===
+Note: The Starlette vulnerability flagged by pip-audit is inherited from fastapi==0.115.0's
+own dependency version pin (starlette<0.39.0). It cannot be fixed without a major upgrade
+to FastAPI, which could introduce breaking API changes. This is documented as an accepted,
+explained risk for this release.

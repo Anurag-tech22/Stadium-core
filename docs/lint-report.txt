@@ -1,0 +1,37 @@
+=== RUFF CHECK OUTPUT ===
+app\api\routes.py:64:1: E402 Module level import not at top of file
+   |
+64 | import asyncio
+   | ^^^^^^^^^^^^^^ E402
+65 | import json
+66 | from fastapi.responses import StreamingResponse
+   |
+
+app\api\routes.py:65:1: E402 Module level import not at top of file
+   |
+64 | import asyncio
+65 | import json
+   | ^^^^^^^^^^^ E402
+66 | from fastapi.responses import StreamingResponse
+   |
+
+app\api\routes.py:66:1: E402 Module level import not at top of file
+   |
+64 | import asyncio
+65 | import json
+66 | from fastapi.responses import StreamingResponse
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ E402
+   |
+
+Found 3 errors.
+
+=========================
+
+=== MYPY CHECK OUTPUT ===
+app\main.py:37: error: Argument 1 to "TemplateResponse" of "Jinja2Templates" has incompatible type "str"; expected "Request[State]"  [arg-type]
+app\main.py:37: error: Argument 2 to "TemplateResponse" of "Jinja2Templates" has incompatible type "dict[str, Request[State]]"; expected "str"  [arg-type]
+app\main.py:42: error: Argument 1 to "TemplateResponse" of "Jinja2Templates" has incompatible type "str"; expected "Request[State]"  [arg-type]
+app\main.py:42: error: Argument 2 to "TemplateResponse" of "Jinja2Templates" has incompatible type "dict[str, Request[State]]"; expected "str"  [arg-type]
+Found 4 errors in 1 file (checked 10 source files)
+
+=========================

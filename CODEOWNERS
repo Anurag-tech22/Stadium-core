@@ -1,0 +1,22 @@
+# CODEOWNERS
+# Code ownership declarations.
+# Reviewers listed here are automatically assigned to PRs that touch their files.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+* @jagta
+
+# Core deterministic engine — must be reviewed carefully; changes here affect safety
+app/core/context_engine.py @jagta
+app/core/schemas.py @jagta
+
+# Security-sensitive files
+app/core/security.py @jagta
+app/main.py @jagta
+.github/workflows/ @jagta
+
+# LLM layer — must never introduce new facts, phrasing only
+app/core/llm.py @jagta
+
+# All tests require owner review to maintain coverage floor
+tests/ @jagta

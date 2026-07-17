@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phoenix Stadium Ops Dashboard — live gate congestion, server reallocation simulator, and sustainability metrics for matchday staff.">
+  <title>Phoenix Stadium — Ops Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css?v=6">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <header class="header">
+    <a href="/" class="brand" aria-label="Phoenix Stadium home">
+      <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="fg" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ff5d3a"/>
+            <stop offset="55%" stop-color="#ffcf4d"/>
+            <stop offset="100%" stop-color="#fff3c4"/>
+          </linearGradient>
+        </defs>
+        <path d="M16 3c2 4-1 6-1 9 2-1 4-3 4-6 3 3 5 8 5 12a8 8 0 1 1-16 0c0-3 1-5 2-7-1 3 0 5 2 5s3-2 2-4c-1-3 0-6 2-9z" fill="url(#fg)"/>
+      </svg>
+      <span class="brand-name">PHOENIX STADIUM</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <div class="nav">
+        <a href="/">Fan Assistant</a>
+        <a href="/ops" class="active">Ops Dashboard</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page" id="main-content">
+
+    <p class="eyebrow">
+      <span class="live-dot" aria-hidden="true"></span>
+      Live &nbsp;·&nbsp; Staff View
+    </p>
+    <h1>Every gate,<br><span class="accent">one glance.</span></h1>
+    <p class="subtitle">
+      Deterministic Erlang-C engine — all gates shown simultaneously with live IoT
+      telemetry. Updates every 5 seconds via Server-Sent Events.
+    </p>
+
+    <!-- ── Live gate table ──────────────────────────────────────── -->
+    <div class="card">
+      <p class="card-title color-gold">Gate Status</p>
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">
+            Real-time gate wait times and congestion levels. Auto-refreshes every 5 seconds via SSE.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Gate</th>
+              <th scope="col">Wait (min)</th>
+              <th scope="col">Utilization</th>
+              <th scope="col">Arrivals/min</th>
+              <th scope="col">Status</th>
+              <th scope="col">Alert</th>
+            </tr>
+          </thead>
+          <tbody
+            id="gate-table"
+            aria-live="polite"
+            aria-label="Gate status — updates every 5 seconds"
+          ></tbody>
+        </table>
+      </div>
+      <p class="ops-footer" id="ops-summary" role="status" aria-live="polite" aria-atomic="true">
+        Loading live data…
+      </p>
+    </div>
+
+    <!-- ── What-If Server Simulator ─────────────────────────────── -->
+    <div class="card">
+      <p class="card-title color-gold">⚙ What-If Server Simulator</p>
+      <p class="card-desc">
+        Pick any gate and adjust the number of open server lanes.
+        The Erlang-C model recalculates the predicted wait <strong>instantly</strong> —
+        no backend call. Use this to decide where to redeploy staff before congestion hits.
+      </p>
+
+      <div class="sim-controls">
+        <div class="field">
+          <label for="sim-gate">Gate to simulate</label>
+          <select id="sim-gate" aria-label="Select gate to simulate">
+            <option value="">— select a gate —</option>
+          </select>
+        </div>
+        <div class="sim-adjust" id="sim-adjust" aria-label="Adjust server count">
+          <button class="sim-btn" id="sim-minus" type="button" aria-label="Remove one server lane">−</button>
+          <div class="sim-count-wrap" aria-live="polite" aria-atomic="true">
+            <span class="sim-count" id="sim-count">—</span>
+            <span class="sim-count-label">servers open</span>
+          </div>
+          <button class="sim-btn" id="sim-plus" type="button" aria-label="Add one server lane">+</button>
+        </div>
+      </div>
+
+      <div class="sim-result" id="sim-result" role="status" aria-live="polite" aria-atomic="true">
+        <div class="sim-col">
+          <div class="sim-label">Current wait</div>
+          <div class="sim-val" id="sim-cur-wait">—</div>
+        </div>
+        <div class="sim-arrow" aria-hidden="true">→</div>
+        <div class="sim-col">
+          <div class="sim-label">Simulated wait</div>
+          <div class="sim-val" id="sim-new-wait">—</div>
+        </div>
+        <div class="sim-col">
+          <div class="sim-label">Time saved</div>
+          <div class="sim-val" id="sim-delta" style="color:var(--green);">—</div>
+        </div>
+      </div>
+      <p class="sim-note" id="sim-note"></p>
+    </div>
+
+    <!-- ── Sustainability metrics ───────────────────────────────── -->
+    <div class="card">
+      <p class="card-title color-green">♻ Sustainability Metrics</p>
+      <p class="card-desc">Live estimates derived from crowd-flow data. Updates with every gate refresh.</p>
+      <div class="sustain-grid" aria-live="polite" aria-label="Live sustainability metrics">
+        <div class="sustain-card">
+          <div class="s-num" id="s-fans">—</div>
+          <div class="s-label">👥 Fans tracked (est.)</div>
+        </div>
+        <div class="sustain-card">
+          <div class="s-num" id="s-recycling">—</div>
+          <div class="s-label">♻ Recycling points active</div>
+        </div>
+        <div class="sustain-card">
+          <div class="s-num" id="s-co2">—</div>
+          <div class="s-label">🌱 CO₂ offset est. (kg)</div>
+        </div>
+        <div class="sustain-card">
+          <div class="s-num" id="s-water">—</div>
+          <div class="s-label">💧 Water refill stations</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    Phoenix Stadium &nbsp;·&nbsp; Ops View &nbsp;·&nbsp;
+    <a href="/.well-known/security.txt">Security</a>
+  </footer>
+
+  <script src="/static/js/app.js?v=6"></script>
+</body>
+</html>

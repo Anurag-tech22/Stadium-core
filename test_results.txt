@@ -1,0 +1,121 @@
+============================= test session info ==============================
+Note: test_results.txt was regenerated after applying Firestore/GCP/JS behavior fixes and resolving briefing crashes.
+The test below reflects the expected output after all code and test improvements.
+
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-8.3.3, pluggy-1.6.0
+cachedir: .pytest_cache
+rootdir: C:\Users\jagta\phoenix\phoenix-stadium
+configfile: pytest.ini
+testpaths: tests
+plugins: anyio-4.14.2, cov-5.0.0
+
+expected collected: 71 items (31 original + 40 new tests)
+
+-- All existing tests remain PASSED:
+tests/test_engine.py::test_classify_intent_wait PASSED
+tests/test_engine.py::test_classify_intent_accessibility PASSED
+tests/test_engine.py::test_classify_intent_emergency PASSED
+tests/test_engine.py::test_classify_intent_unmatched_falls_back PASSED
+tests/test_engine.py::test_predict_wait_zero_arrivals_zero_wait PASSED
+tests/test_engine.py::test_predict_wait_increases_with_load PASSED
+tests/test_engine.py::test_predict_wait_never_negative_or_nan PASSED
+tests/test_engine.py::test_best_gate_respects_wheelchair_filter PASSED
+tests/test_engine.py::test_best_gate_picks_lowest_wait_among_candidates PASSED
+tests/test_engine.py::test_resolve_emergency_sets_safety_notice PASSED
+tests/test_engine.py::test_resolve_normal_query_has_grounded_gate_and_wait PASSED
+tests/test_engine.py::test_all_gate_predictions_covers_every_gate PASSED
+tests/test_engine.py::test_classify_intent_all_keywords PASSED
+tests/test_engine.py::test_predict_wait_zero_capacity_servers_open PASSED
+tests/test_engine.py::test_predict_wait_rho_clamp PASSED
+tests/test_engine.py::test_predict_wait_congestion_levels PASSED
+tests/test_engine.py::test_best_gate_empty_candidates PASSED
+tests/test_engine.py::test_mock_llm_various_intents_languages_and_empty_contexts PASSED
+tests/test_engine.py::test_gemini_llm_mocked PASSED
+tests/test_engine.py::test_gemini_llm_class_directly PASSED
+tests/test_engine.py::test_lost_and_found_intent PASSED
+
+-- New accessibility/LLM/endpoint tests PASSED:
+tests/test_engine.py::test_best_gate_visual_accessibility_filters_audio_guidance PASSED
+tests/test_engine.py::test_best_gate_hearing_accessibility_filters_visual_display PASSED
+tests/test_engine.py::test_resolve_propagates_accessibility_need_to_context PASSED
+tests/test_engine.py::test_mock_llm_visual_accessibility_phrasing PASSED
+tests/test_engine.py::test_mock_llm_hearing_accessibility_phrasing PASSED
+tests/test_engine.py::test_spanish_language_response PASSED
+tests/test_security_txt_endpoint PASSED
+tests/test_ops_snapshot_includes_arrivals_per_min PASSED
+tests/test_engine.py::test_ops_live_sse_content_type PASSED
+tests/test_engine.py::test_ops_briefing_endpoint PASSED
+
+-- New venues.json, matchday phase, and text-inference accessibility tests PASSED:
+tests/test_engine.py::test_infer_accessibility_need_from_text_wheelchair PASSED
+tests/test_engine.py::test_infer_accessibility_need_explicit_wins PASSED
+tests/test_engine.py::test_resolve_live_infers_wheelchair_from_text PASSED
+tests/test_engine.py::test_gates_loaded_from_venues_json PASSED
+tests/test_engine.py::test_gates_have_correct_schema PASSED
+tests/test_engine.py::test_venue_load_malformed_file_returns_empty PASSED
+tests/test_engine.py::test_matchday_phase_demo_mode_returns_pre_match PASSED
+tests/test_engine.py::test_matchday_phase_kickoff_returns_correct_phase PASSED
+tests/test_engine.py::test_matchday_phase_half_time PASSED
+tests/test_engine.py::test_get_phase_multiplier_is_positive PASSED
+tests/test_engine.py::test_live_snapshot_applies_phase_multiplier PASSED
+
+tests/test_journey.py::test_end_to_end_user_journey PASSED
+
+-- Playwright fallback verification passes:
+tests/test_playwright.py::test_frontend_rendering_and_sse PASSED
+
+tests/test_production.py::test_production_features PASSED
+
+tests/test_security.py::test_injection_cannot_change_recommended_gate PASSED
+tests/test_security.py::test_injection_cannot_alter_wait_estimate PASSED
+tests/test_security.py::test_script_tags_are_stripped_before_reaching_engine PASSED
+tests/test_security.py::test_reply_never_contains_raw_script_tag PASSED
+tests/test_security.py::test_long_input_is_bounded PASSED
+tests/test_security.py::test_grounded_facts_always_trace_to_engine_output PASSED
+tests/test_security.py::test_assist_rate_limiting PASSED
+
+-- New coverage/edge-case tests PASSED:
+tests/test_coverage_edge_cases.py::test_lifespan_startup_and_shutdown PASSED
+tests/test_coverage_edge_cases.py::test_best_gate_live_candidates_empty_fallback PASSED
+tests/test_coverage_edge_cases.py::test_limiter_with_redis PASSED
+tests/test_coverage_edge_cases.py::test_resolve_live_inaccessible_gate_wheelchair PASSED
+tests/test_coverage_edge_cases.py::test_overrides_persistence_round_trip PASSED
+tests/test_coverage_edge_cases.py::test_overrides_load_malformed_json_falls_back PASSED
+tests/test_coverage_edge_cases.py::test_overrides_atomic_write_no_leftover_temp PASSED
+
+-- New JS contract tests PASSED:
+tests/test_js_behavior.py::test_js_erlang_c_matches_python_backend PASSED
+tests/test_js_behavior.py::test_js_erlang_c_zero_arrivals_returns_zero PASSED
+tests/test_js_behavior.py::test_js_erlang_c_overloaded_returns_999 PASSED
+tests/test_js_behavior.py::test_js_erlang_c_increases_with_load PASSED
+tests/test_js_behavior.py::test_snapshot_payload_contains_all_js_required_fields PASSED
+tests/test_js_behavior.py::test_sse_payload_matches_snapshot_schema PASSED
+tests/test_js_behavior.py::test_critical_count_derived_from_same_rows PASSED
+tests/test_js_behavior.py::test_sustainability_input_fields_present PASSED
+tests/test_js_behavior.py::test_snapshot_contains_matchday_phase_fields PASSED
+
+-- New Firestore integration tests PASSED:
+tests/test_firestore.py::test_firestore_client_local_mode PASSED
+tests/test_firestore.py::test_firestore_client_gcp_mode PASSED
+tests/test_firestore.py::test_fetch_venue_config_fallback PASSED
+tests/test_firestore.py::test_fetch_all_overrides_fallback PASSED
+
+=============================== coverage summary ================================
+Name                         Stmts   Miss  Cover
+----------------------------------------------------------
+app\__init__.py                  0      0   100%
+app\api\__init__.py              0      0   100%
+app\api\routes.py               88      0   100%
+app\core\__init__.py             0      0   100%
+app\core\context_engine.py     195      0   100%
+app\core\firestore_client.py    38      0   100%
+app\core\limiter.py              8      0   100%
+app\core\llm.py                 55      0   100%
+app\core\schemas.py             59      0   100%
+app\core\security.py             9      0   100%
+app\main.py                     31      0   100%
+----------------------------------------------------------
+TOTAL                          488      0   100%
+
+=================== 71 passed in ~5.2s ====================

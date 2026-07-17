@@ -1,0 +1,15 @@
+# Exclude local development and cache folders from Cloud Build upload
+.gcloudignore
+.git
+.gitignore
+.venv
+venv
+ENV
+env
+.pytest_cache
+.ruff_cache
+.mypy_cache
+__pycache__
+*.pyc
+test_results.txt
+server.log
