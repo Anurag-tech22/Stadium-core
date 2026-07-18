@@ -1,3 +1,10 @@
+"""Application entry point for Phoenix Stadium Assistant.
+
+Bootstraps the FastAPI application, registers middleware (CORS, GZip,
+rate-limiting, security headers), mounts static files and templates,
+and wires the API router.
+"""
+
 from __future__ import annotations
 
 import logging

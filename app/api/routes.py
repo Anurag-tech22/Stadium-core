@@ -1,3 +1,10 @@
+"""API route definitions for Phoenix Stadium Assistant.
+
+All routes are stateless. Business logic lives in context_engine.py;
+this module only wires HTTP verbs to that logic and handles
+serialization/streaming.
+"""
+
 import asyncio
 import json
 from collections.abc import AsyncGenerator
