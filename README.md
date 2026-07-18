@@ -182,3 +182,11 @@ gcloud config set project <your-project-id>
 # 3. Deploy
 gcloud run deploy phoenix-stadium --source . --region us-central1 --allow-unauthenticated
 ```
+
+---
+
+## 👥 Contributors
+
+This project was built and optimized with the support of:
+* 🤖 **Gemini** (Google DeepMind's Advanced Agentic Coding AI)
+* 🧠 **Claude** (Supporting AI Assistant)
